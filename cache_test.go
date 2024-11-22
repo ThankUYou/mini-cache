@@ -7,33 +7,48 @@ import (
 	"time"
 )
 
-func TestCache(t *testing.T) {
-	cache := cache.New[int, string]()
+func TestCacheWithNew(t *testing.T) {
+	c := cache.New[int, string]()
 	// cache.Len()
 	// println(cache.Len())
-	cache.Set(1, "a")
+	c.Set(1, "a")
 	// println(cache.Len())
-	cache.Set(2, "b")
-	value1, ok1 := cache.Get(1)
+	c.Set(2, "b")
+	value1, ok1 := c.Get(1)
 
 	if !ok1 || value1 != "a" {
 		t.Errorf("cache.Get(1) = %v, %v; want %v, %v", value1, ok1, "a", true)
 	}
 
-	value2, ok2 := cache.Get(2)
+	value2, ok2 := c.Get(2)
 	if !ok2 || value2 != "b" {
 		t.Errorf("cache.Get(2) = %v, %v; want %v, %v", value2, ok2, "b", true)
 	}
 
-	length := cache.Len()
+	length := c.Len()
 	if length != 2 {
 		t.Errorf("cache.Len() = %v; want %v", length, 2)
 	}
 	// delete
-	cache.Delete(1)
-	value1, ok1 = cache.Get(1)
+	c.Delete(1)
+	value1, ok1 = c.Get(1)
 	if ok1 {
 		t.Errorf("cache.Get(1) = %v, %v; want %v, %v", value1, ok1, "", false)
+	}
+}
+
+func TestCacheWithExpiration(t *testing.T) {
+	c := cache.New[int, string]()
+	c.Set(1, "a", cache.WithExpiration(3*time.Second))
+	c.Set(2, "b", cache.WithExpiration(5*time.Second))
+	time.Sleep(4 * time.Second)
+	_, ok1 := c.Get(1)
+	value2, ok2 := c.Get(2)
+	if ok1 {
+		t.Errorf("cache.Get(1) shoule be expired")
+	}
+	if !ok2 || value2 != "b" {
+		t.Errorf("cache.Get(2) = %v, %v; want %v, %v", value2, ok2, "b", true)
 	}
 }
 
@@ -53,5 +68,4 @@ func TestNewContext(t *testing.T) {
 	if bok {
 		t.Errorf("cache.Get(b) = %v, %v; want %v, %v", gotb, bok, 0, false)
 	}
-
 }
