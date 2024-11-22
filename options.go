@@ -1,6 +1,7 @@
 package cache
 
 import (
+	"cache/evication/fifo"
 	"cache/evication/simple"
 	"time"
 )
@@ -13,7 +14,7 @@ import (
 type ItemOption func(*itemOption)
 
 type itemOption struct {
-	expiration time.Time // default none 
+	expiration time.Time // default none
 }
 
 // WithExpiration sets the expiration time for the item
@@ -49,3 +50,8 @@ func WithJanitorInterval[K comparable, V any](ttl time.Duration) Option[K, V] {
 }
 
 // new evication policy
+func AsFIFO[K comparable, V any](opts ...fifo.Option) Option[K, V] {
+	return func(o *option[K, V]) {
+		o.cache = fifo.NewCache[K, *Item[K, V]](opts...)
+	}
+}
