@@ -2,7 +2,6 @@ package cache
 
 import (
 	"context"
-	"fmt"
 	"sync"
 )
 
@@ -36,11 +35,9 @@ func (c *Cache[K, V]) Get(key K) (zero V, ok bool) {
 	defer c.mu.Unlock()
 	item, ok := c.cache.Get(key)
 	if !ok {
-		fmt.Println("not found")
 		return
 	}
 	if item.Exipred() {
-		fmt.Println("expired")
 		return zero, false
 	}
 	return item.Value, true
