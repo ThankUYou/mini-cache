@@ -10,7 +10,7 @@ mini-cache is an in-memory key:value store/cache.Any object can be stored, for a
 - [x] LRU、LFU
 - [x] Add benchmark
 - [x] Try to Improve efficiency(shares) 
-- [x] MRU、CLOCK
+- [] MRU、CLOCK
 
 # Result
 goos: darwin
