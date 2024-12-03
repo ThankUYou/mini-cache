@@ -13,6 +13,7 @@ mini-cache is an in-memory key:value store/cache.Any object can be stored, for a
 - [ ] MRU、CLOCK
 
 # Result
+```
 goos: darwin
 goarch: arm64
 pkg: cache/benchmark
@@ -24,3 +25,4 @@ BenchmarkRWMutexMapGetConcurrent-8      16569025                74.31 ns/op     
 BenchmarkMiniCacheGet-8                 78443338                14.74 ns/op            0 B/op          0 allocs/op
 BenchmarkMiniCacheDelete-8              100000000               11.72 ns/op            0 B/op          0 allocs/op
 BenchmarkMiniCacheDeleteExpired-8       100000000               11.00 ns/op            0 B/op          0 allocs/op
+```
